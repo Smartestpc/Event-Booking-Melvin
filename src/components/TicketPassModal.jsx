@@ -1,17 +1,8 @@
 import React from 'react';
-import { X, Printer, Ticket, Calendar, MapPin, User, CheckCircle2 } from 'lucide-react';
-import { Booking } from '../types';
-import { formatNaira } from '../utils/formatters';
+import { X, Printer, Ticket, CheckCircle2 } from 'lucide-react';
+import { formatNaira } from '../utils/formatters.js';
 
-interface TicketPassModalProps {
-  booking: Booking | null;
-  onClose: () => void;
-}
-
-export const TicketPassModal: React.FC<TicketPassModalProps> = ({
-  booking,
-  onClose,
-}) => {
+export const TicketPassModal = ({ booking, onClose }) => {
   if (!booking) return null;
 
   const handlePrint = () => {

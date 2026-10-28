@@ -1,6 +1,4 @@
-import { EventItem, EventCategory } from '../types';
-
-export const INITIAL_EVENTS: EventItem[] = [
+export const INITIAL_EVENTS = [
   {
     id: '12',
     title: 'Astra West Africa Tech Summit 2026',
@@ -216,7 +214,7 @@ export const INITIAL_EVENTS: EventItem[] = [
   }
 ];
 
-export const CATEGORIES: { name: EventCategory; description: string }[] = [
+export const CATEGORIES = [
   { name: 'All', description: 'Browse all events and experiences' },
   { name: 'Technology', description: 'Developer summits, AI panels, and tech masterclasses' },
   { name: 'Music & Concerts', description: 'Live bands, music festivals, and acoustic nights' },

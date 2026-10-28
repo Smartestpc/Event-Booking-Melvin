@@ -3,36 +3,23 @@ import {
   Ticket,
   Calendar,
   MapPin,
-  Clock,
-  Printer,
-  Download,
-  AlertTriangle,
   Search,
   CheckCircle2,
   XCircle,
   ArrowRight,
   User,
-  ShieldCheck
 } from 'lucide-react';
-import { Booking } from '../types';
-import { formatNaira } from '../utils/formatters';
+import { formatNaira } from '../utils/formatters.js';
 
-interface MyBookingsPageProps {
-  bookings: Booking[];
-  onCancelBooking: (ticketNumber: string) => void;
-  onExploreEvents: () => void;
-  onOpenPassModal: (booking: Booking) => void;
-}
-
-export const MyBookingsPage: React.FC<MyBookingsPageProps> = ({
+export const MyBookingsPage = ({
   bookings,
   onCancelBooking,
   onExploreEvents,
   onOpenPassModal,
 }) => {
-  const [filterTab, setFilterTab] = useState<'all' | 'active' | 'cancelled'>('all');
+  const [filterTab, setFilterTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [confirmCancelTicket, setConfirmCancelTicket] = useState<string | null>(null);
+  const [confirmCancelTicket, setConfirmCancelTicket] = useState(null);
 
   // Filter bookings
   const filteredBookings = bookings.filter((b) => {

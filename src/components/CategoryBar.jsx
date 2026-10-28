@@ -8,19 +8,10 @@ import {
   Utensils, 
   Activity 
 } from 'lucide-react';
-import { EventCategory } from '../types';
-import { CATEGORIES } from '../data/eventsData';
+import { CATEGORIES } from '../data/eventsData.js';
 
-interface CategoryBarProps {
-  selectedCategory: EventCategory;
-  onSelectCategory: (category: EventCategory) => void;
-}
-
-export const CategoryBar: React.FC<CategoryBarProps> = ({
-  selectedCategory,
-  onSelectCategory,
-}) => {
-  const getCategoryIcon = (name: EventCategory) => {
+export const CategoryBar = ({ selectedCategory, onSelectCategory }) => {
+  const getCategoryIcon = (name) => {
     switch (name) {
       case 'Technology':
         return <Cpu className="h-4 w-4" />;

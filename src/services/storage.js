@@ -1,5 +1,4 @@
-import { Booking, CustomerInfo, EventItem } from '../types';
-import { INITIAL_EVENTS } from '../data/eventsData';
+import { INITIAL_EVENTS } from '../data/eventsData.js';
 
 const BOOKINGS_KEY = 'aura_event_bookings_v1';
 const CUSTOMER_KEY = 'aura_event_customer_profile_v1';
@@ -8,7 +7,7 @@ const FAVORITES_KEY = 'aura_event_saved_v1';
 
 export const storageService = {
   // Get all bookings
-  getBookings(): Booking[] {
+  getBookings() {
     try {
       const data = localStorage.getItem(BOOKINGS_KEY);
       if (!data) return [];
@@ -21,16 +20,16 @@ export const storageService = {
   },
 
   // Save a new booking
-  saveBooking(booking: Booking): boolean {
+  saveBooking(booking) {
     try {
       const current = this.getBookings();
       const updated = [booking, ...current];
       localStorage.setItem(BOOKINGS_KEY, JSON.stringify(updated));
 
-      // Also persist customer profile for ease of next booking
+      // Persist customer profile
       this.saveCustomerInfo(booking.customer);
 
-      // Decrement available tickets in inventory
+      // Decrement inventory
       this.decrementTicketInventory(booking.eventId, booking.quantity);
 
       return true;
@@ -41,14 +40,14 @@ export const storageService = {
   },
 
   // Cancel an existing booking
-  cancelBooking(ticketNumber: string): boolean {
+  cancelBooking(ticketNumber) {
     try {
       const bookings = this.getBookings();
       const target = bookings.find((b) => b.ticketNumber === ticketNumber);
       if (!target) return false;
 
       const updated = bookings.map((b) =>
-        b.ticketNumber === ticketNumber ? { ...b, status: 'Cancelled' as const } : b
+        b.ticketNumber === ticketNumber ? { ...b, status: 'Cancelled' } : b
       );
       localStorage.setItem(BOOKINGS_KEY, JSON.stringify(updated));
 
@@ -61,19 +60,19 @@ export const storageService = {
     }
   },
 
-  // Customer info management
-  getCustomerInfo(): CustomerInfo | null {
+  // Customer info
+  getCustomerInfo() {
     try {
       const data = localStorage.getItem(CUSTOMER_KEY);
       if (!data) return null;
-      return JSON.parse(data) as CustomerInfo;
+      return JSON.parse(data);
     } catch (err) {
       console.error('Error loading customer info', err);
       return null;
     }
   },
 
-  saveCustomerInfo(info: CustomerInfo): void {
+  saveCustomerInfo(info) {
     try {
       localStorage.setItem(CUSTOMER_KEY, JSON.stringify(info));
     } catch (err) {
@@ -82,14 +81,13 @@ export const storageService = {
   },
 
   // Inventory management
-  getInventory(): Record<string, number> {
+  getInventory() {
     try {
       const data = localStorage.getItem(INVENTORY_KEY);
       if (data) {
         return JSON.parse(data);
       }
-      // Initialize from INITIAL_EVENTS
-      const initial: Record<string, number> = {};
+      const initial = {};
       INITIAL_EVENTS.forEach((ev) => {
         initial[ev.id] = ev.initialAvailableTickets;
       });
@@ -97,7 +95,7 @@ export const storageService = {
       return initial;
     } catch (err) {
       console.error('Error getting inventory', err);
-      const fallback: Record<string, number> = {};
+      const fallback = {};
       INITIAL_EVENTS.forEach((ev) => {
         fallback[ev.id] = ev.initialAvailableTickets;
       });
@@ -105,7 +103,7 @@ export const storageService = {
     }
   },
 
-  getAvailableTickets(eventId: string): number {
+  getAvailableTickets(eventId) {
     const inventory = this.getInventory();
     if (typeof inventory[eventId] === 'number') {
       return inventory[eventId];
@@ -114,10 +112,10 @@ export const storageService = {
     return ev ? ev.initialAvailableTickets : 0;
   },
 
-  decrementTicketInventory(eventId: string, count: number): void {
+  decrementTicketInventory(eventId, count) {
     try {
       const inventory = this.getInventory();
-      const current = inventory[eventId] ?? 50;
+      const current = inventory[eventId] !== undefined ? inventory[eventId] : 50;
       inventory[eventId] = Math.max(0, current - count);
       localStorage.setItem(INVENTORY_KEY, JSON.stringify(inventory));
     } catch (err) {
@@ -125,10 +123,10 @@ export const storageService = {
     }
   },
 
-  incrementTicketInventory(eventId: string, count: number): void {
+  incrementTicketInventory(eventId, count) {
     try {
       const inventory = this.getInventory();
-      const current = inventory[eventId] ?? 0;
+      const current = inventory[eventId] || 0;
       inventory[eventId] = current + count;
       localStorage.setItem(INVENTORY_KEY, JSON.stringify(inventory));
     } catch (err) {
@@ -136,8 +134,8 @@ export const storageService = {
     }
   },
 
-  // Saved events / favorites
-  getFavorites(): string[] {
+  // Saved / Favorite events
+  getFavorites() {
     try {
       const data = localStorage.getItem(FAVORITES_KEY);
       return data ? JSON.parse(data) : [];
@@ -146,7 +144,7 @@ export const storageService = {
     }
   },
 
-  toggleFavorite(eventId: string): string[] {
+  toggleFavorite(eventId) {
     try {
       const current = this.getFavorites();
       const updated = current.includes(eventId)
@@ -159,17 +157,8 @@ export const storageService = {
     }
   },
 
-  // Helper to get all events merged with dynamic inventory
-  getEventsWithInventory(): EventItem[] {
-    const inventory = this.getInventory();
-    return INITIAL_EVENTS.map((item) => ({
-      ...item,
-      initialAvailableTickets: inventory[item.id] !== undefined ? inventory[item.id] : item.initialAvailableTickets
-    }));
-  },
-
-  // Ticket number generator formatted like TKT-839201
-  generateTicketNumber(): string {
+  // Generate fake ticket number: TKT-839201
+  generateTicketNumber() {
     const randomDigits = Math.floor(100000 + Math.random() * 900000);
     return `TKT-${randomDigits}`;
   }

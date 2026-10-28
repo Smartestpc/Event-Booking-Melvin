@@ -1,16 +1,8 @@
 import React from 'react';
 import { Search, MapPin, Calendar, SlidersHorizontal, RotateCcw } from 'lucide-react';
-import { EventCategory, FilterState } from '../types';
-import { CATEGORIES, CITIES } from '../data/eventsData';
+import { CATEGORIES, CITIES } from '../data/eventsData.js';
 
-interface EventsFilterProps {
-  filters: FilterState;
-  onFilterChange: (filters: Partial<FilterState>) => void;
-  onResetFilters: () => void;
-  totalResults: number;
-}
-
-export const EventsFilter: React.FC<EventsFilterProps> = ({
+export const EventsFilter = ({
   filters,
   onFilterChange,
   onResetFilters,
@@ -64,7 +56,7 @@ export const EventsFilter: React.FC<EventsFilterProps> = ({
               value={filters.dateFilter}
               onChange={(e) =>
                 onFilterChange({
-                  dateFilter: e.target.value as FilterState['dateFilter'],
+                  dateFilter: e.target.value,
                 })
               }
               className="w-full sm:w-auto appearance-none rounded-lg border border-slate-800 bg-slate-950 py-2.5 pl-9 pr-8 text-xs font-medium text-slate-200 focus:border-amber-500 focus:outline-none cursor-pointer"
@@ -82,7 +74,7 @@ export const EventsFilter: React.FC<EventsFilterProps> = ({
               value={filters.sortBy}
               onChange={(e) =>
                 onFilterChange({
-                  sortBy: e.target.value as FilterState['sortBy'],
+                  sortBy: e.target.value,
                 })
               }
               className="w-full sm:w-auto appearance-none rounded-lg border border-slate-800 bg-slate-950 py-2.5 pl-9 pr-8 text-xs font-medium text-slate-200 focus:border-amber-500 focus:outline-none cursor-pointer"

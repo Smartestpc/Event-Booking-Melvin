@@ -1,24 +1,10 @@
 import React from 'react';
-import { Hero } from './Hero';
-import { CategoryBar } from './CategoryBar';
-import { EventCard } from './EventCard';
-import { EventItem, EventCategory } from '../types';
+import { Hero } from './Hero.jsx';
+import { CategoryBar } from './CategoryBar.jsx';
+import { EventCard } from './EventCard.jsx';
 import { ArrowRight, Sparkles, Calendar, ShieldCheck, Ticket } from 'lucide-react';
 
-interface HomePageProps {
-  events: EventItem[];
-  inventory: Record<string, number>;
-  favorites: string[];
-  selectedCategory: EventCategory;
-  onSelectCategory: (category: EventCategory) => void;
-  onToggleFavorite: (id: string) => void;
-  onViewDetails: (id: string) => void;
-  onBookNow: (id: string) => void;
-  onExploreAll: () => void;
-  onSearchHero: (query: string, city: string) => void;
-}
-
-export const HomePage: React.FC<HomePageProps> = ({
+export const HomePage = ({
   events,
   inventory,
   favorites,
@@ -36,7 +22,6 @@ export const HomePage: React.FC<HomePageProps> = ({
     : events.filter((e) => e.category === selectedCategory);
 
   const featuredEvents = events.filter((e) => e.featured);
-  const upcomingEvents = events.slice(0, 6);
 
   return (
     <div className="space-y-16 pb-16">
@@ -83,7 +68,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <EventCard
               key={ev.id}
               event={ev}
-              availableTickets={inventory[ev.id] ?? ev.initialAvailableTickets}
+              availableTickets={inventory[ev.id] !== undefined ? inventory[ev.id] : ev.initialAvailableTickets}
               isFavorite={favorites.includes(ev.id)}
               onToggleFavorite={onToggleFavorite}
               onViewDetails={onViewDetails}
@@ -125,7 +110,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <EventCard
               key={ev.id}
               event={ev}
-              availableTickets={inventory[ev.id] ?? ev.initialAvailableTickets}
+              availableTickets={inventory[ev.id] !== undefined ? inventory[ev.id] : ev.initialAvailableTickets}
               isFavorite={favorites.includes(ev.id)}
               onToggleFavorite={onToggleFavorite}
               onViewDetails={onViewDetails}

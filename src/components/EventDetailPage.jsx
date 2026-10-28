@@ -14,19 +14,9 @@ import {
   ExternalLink,
   Heart
 } from 'lucide-react';
-import { EventItem } from '../types';
-import { formatNaira, generateGoogleCalendarUrl } from '../utils/formatters';
+import { formatNaira, generateGoogleCalendarUrl } from '../utils/formatters.js';
 
-interface EventDetailPageProps {
-  event: EventItem;
-  availableTickets: number;
-  isFavorite: boolean;
-  onToggleFavorite: (id: string) => void;
-  onBack: () => void;
-  onProceedToBooking: (eventId: string, quantity: number) => void;
-}
-
-export const EventDetailPage: React.FC<EventDetailPageProps> = ({
+export const EventDetailPage = ({
   event,
   availableTickets,
   isFavorite,

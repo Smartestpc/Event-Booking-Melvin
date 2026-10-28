@@ -1,22 +1,12 @@
 import React, { useState } from 'react';
 import { Search, MapPin, ArrowRight, ShieldCheck, Calendar, Users, Sparkles } from 'lucide-react';
-import { CITIES } from '../data/eventsData';
+import { CITIES } from '../data/eventsData.js';
 
-interface HeroProps {
-  onSearch: (query: string, city: string) => void;
-  onExploreClick: () => void;
-  onFeaturedClick: (eventId: string) => void;
-}
-
-export const Hero: React.FC<HeroProps> = ({
-  onSearch,
-  onExploreClick,
-  onFeaturedClick,
-}) => {
+export const Hero = ({ onSearch, onExploreClick, onFeaturedClick }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCity, setSelectedCity] = useState('All Locations');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     onSearch(searchQuery, selectedCity);
   };

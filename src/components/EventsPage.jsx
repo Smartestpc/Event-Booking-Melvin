@@ -1,22 +1,9 @@
 import React, { useMemo } from 'react';
-import { EventItem, FilterState } from '../types';
-import { EventsFilter } from './EventsFilter';
-import { EventCard } from './EventCard';
+import { EventsFilter } from './EventsFilter.jsx';
+import { EventCard } from './EventCard.jsx';
 import { SearchX, Sparkles } from 'lucide-react';
 
-interface EventsPageProps {
-  events: EventItem[];
-  inventory: Record<string, number>;
-  favorites: string[];
-  filters: FilterState;
-  onFilterChange: (filters: Partial<FilterState>) => void;
-  onResetFilters: () => void;
-  onToggleFavorite: (id: string) => void;
-  onViewDetails: (id: string) => void;
-  onBookNow: (id: string) => void;
-}
-
-export const EventsPage: React.FC<EventsPageProps> = ({
+export const EventsPage = ({
   events,
   inventory,
   favorites,
@@ -58,10 +45,8 @@ export const EventsPage: React.FC<EventsPageProps> = ({
         if (filters.dateFilter === 'weekend') {
           const d = new Date(ev.date);
           const day = d.getDay();
-          // Sunday (0) or Saturday (6)
           if (day !== 0 && day !== 6) return false;
         } else if (filters.dateFilter === 'month') {
-          // Nov 2026 events
           if (!ev.date.startsWith('2026-11')) return false;
         }
 
@@ -75,11 +60,10 @@ export const EventsPage: React.FC<EventsPageProps> = ({
           return b.basePrice - a.basePrice;
         }
         if (filters.sortBy === 'popular') {
-          const aRatio = a.totalCapacity - (inventory[a.id] ?? a.initialAvailableTickets);
-          const bRatio = b.totalCapacity - (inventory[b.id] ?? b.initialAvailableTickets);
+          const aRatio = a.totalCapacity - (inventory[a.id] !== undefined ? inventory[a.id] : a.initialAvailableTickets);
+          const bRatio = b.totalCapacity - (inventory[b.id] !== undefined ? inventory[b.id] : b.initialAvailableTickets);
           return bRatio - aRatio;
         }
-        // Default 'date'
         return new Date(a.date).getTime() - new Date(b.date).getTime();
       });
   }, [events, filters, inventory]);
@@ -115,7 +99,7 @@ export const EventsPage: React.FC<EventsPageProps> = ({
             <EventCard
               key={ev.id}
               event={ev}
-              availableTickets={inventory[ev.id] ?? ev.initialAvailableTickets}
+              availableTickets={inventory[ev.id] !== undefined ? inventory[ev.id] : ev.initialAvailableTickets}
               isFavorite={favorites.includes(ev.id)}
               onToggleFavorite={onToggleFavorite}
               onViewDetails={onViewDetails}

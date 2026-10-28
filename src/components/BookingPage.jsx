@@ -13,19 +13,10 @@ import {
   Ticket,
   AlertCircle
 } from 'lucide-react';
-import { EventItem, CustomerInfo, Booking } from '../types';
-import { storageService } from '../services/storage';
-import { formatNaira } from '../utils/formatters';
+import { storageService } from '../services/storage.js';
+import { formatNaira } from '../utils/formatters.js';
 
-interface BookingPageProps {
-  event: EventItem;
-  initialQuantity?: number;
-  availableTickets: number;
-  onBack: () => void;
-  onBookingComplete: (booking: Booking) => void;
-}
-
-export const BookingPage: React.FC<BookingPageProps> = ({
+export const BookingPage = ({
   event,
   initialQuantity = 1,
   availableTickets,
@@ -43,12 +34,12 @@ export const BookingPage: React.FC<BookingPageProps> = ({
   // Discount code state
   const [promoCode, setPromoCode] = useState('');
   const [discountPercent, setDiscountPercent] = useState(0);
-  const [promoMessage, setPromoMessage] = useState<string | null>(null);
+  const [promoMessage, setPromoMessage] = useState(null);
 
   // Payment method
-  const [paymentMethod, setPaymentMethod] = useState<'Card' | 'Bank Transfer' | 'USSD'>('Card');
+  const [paymentMethod, setPaymentMethod] = useState('Card');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
+  const [formError, setFormError] = useState(null);
 
   // Load persisted customer info on mount
   useEffect(() => {
@@ -79,7 +70,7 @@ export const BookingPage: React.FC<BookingPageProps> = ({
   const discountAmount = Math.round((subtotal * discountPercent) / 100);
   const totalAmount = subtotal - discountAmount;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setFormError(null);
 
@@ -105,7 +96,7 @@ export const BookingPage: React.FC<BookingPageProps> = ({
 
     // Simulate fast reliable payment gateway authorization
     setTimeout(() => {
-      const customer: CustomerInfo = {
+      const customer = {
         fullName: fullName.trim(),
         email: email.trim(),
         phone: phone.trim(),
@@ -113,7 +104,7 @@ export const BookingPage: React.FC<BookingPageProps> = ({
 
       const ticketNumber = storageService.generateTicketNumber();
 
-      const newBooking: Booking = {
+      const newBooking = {
         id: `book_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
         ticketNumber,
         eventId: event.id,

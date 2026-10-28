@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
 import { Ticket, Mail, ShieldCheck, Check, ArrowRight } from 'lucide-react';
-import { EventCategory } from '../types';
 
-interface FooterProps {
-  onSelectCategory: (cat: EventCategory) => void;
-  onNavigate: (view: string) => void;
-}
-
-export const Footer: React.FC<FooterProps> = ({ onSelectCategory, onNavigate }) => {
+export const Footer = ({ onSelectCategory, onNavigate }) => {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = (e) => {
     e.preventDefault();
     if (email.trim()) {
       setSubscribed(true);

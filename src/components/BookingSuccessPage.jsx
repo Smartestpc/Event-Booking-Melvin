@@ -4,25 +4,14 @@ import {
   Ticket,
   Calendar,
   MapPin,
-  Clock,
-  Printer,
   ArrowRight,
   User,
   ShieldCheck,
-  CreditCard,
   Download
 } from 'lucide-react';
-import { Booking } from '../types';
-import { formatNaira, generateGoogleCalendarUrl } from '../utils/formatters';
+import { formatNaira, generateGoogleCalendarUrl } from '../utils/formatters.js';
 
-interface BookingSuccessPageProps {
-  booking: Booking;
-  onViewMyBookings: () => void;
-  onExploreMore: () => void;
-  onOpenPassModal: (booking: Booking) => void;
-}
-
-export const BookingSuccessPage: React.FC<BookingSuccessPageProps> = ({
+export const BookingSuccessPage = ({
   booking,
   onViewMyBookings,
   onExploreMore,
@@ -132,28 +121,21 @@ export const BookingSuccessPage: React.FC<BookingSuccessPageProps> = ({
               {/* Simulated QR Code */}
               <div className="flex flex-col items-center justify-center rounded-xl bg-white p-4 text-slate-950">
                 <svg className="h-28 w-28" viewBox="0 0 100 100" fill="none">
-                  {/* Outer corner squares */}
                   <rect x="5" y="5" width="28" height="28" rx="4" stroke="#0f172a" strokeWidth="6" />
                   <rect x="13" y="13" width="12" height="12" fill="#0f172a" />
-                  
                   <rect x="67" y="5" width="28" height="28" rx="4" stroke="#0f172a" strokeWidth="6" />
                   <rect x="75" y="13" width="12" height="12" fill="#0f172a" />
-
                   <rect x="5" y="67" width="28" height="28" rx="4" stroke="#0f172a" strokeWidth="6" />
                   <rect x="13" y="75" width="12" height="12" fill="#0f172a" />
-
-                  {/* QR Pattern Blocks */}
                   <rect x="42" y="8" width="8" height="8" fill="#0f172a" />
                   <rect x="53" y="14" width="6" height="6" fill="#0f172a" />
                   <rect x="42" y="24" width="10" height="6" fill="#0f172a" />
-
                   <rect x="10" y="42" width="6" height="8" fill="#0f172a" />
                   <rect x="22" y="44" width="8" height="6" fill="#0f172a" />
                   <rect x="36" y="40" width="8" height="12" fill="#0f172a" />
                   <rect x="50" y="46" width="12" height="6" fill="#0f172a" />
                   <rect x="70" y="42" width="8" height="8" fill="#0f172a" />
                   <rect x="85" y="44" width="6" height="10" fill="#0f172a" />
-
                   <rect x="42" y="66" width="12" height="6" fill="#0f172a" />
                   <rect x="60" y="66" width="6" height="10" fill="#0f172a" />
                   <rect x="74" y="62" width="14" height="6" fill="#0f172a" />

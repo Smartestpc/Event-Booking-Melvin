@@ -1,34 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Navbar } from './components/Navbar';
-import { Footer } from './components/Footer';
-import { HomePage } from './components/HomePage';
-import { EventsPage } from './components/EventsPage';
-import { EventDetailPage } from './components/EventDetailPage';
-import { BookingPage } from './components/BookingPage';
-import { BookingSuccessPage } from './components/BookingSuccessPage';
-import { MyBookingsPage } from './components/MyBookingsPage';
-import { TicketPassModal } from './components/TicketPassModal';
-import { INITIAL_EVENTS } from './data/eventsData';
-import { storageService } from './services/storage';
-import { EventItem, EventCategory, Booking, FilterState } from './types';
+import { Navbar } from './components/Navbar.jsx';
+import { Footer } from './components/Footer.jsx';
+import { HomePage } from './components/HomePage.jsx';
+import { EventsPage } from './components/EventsPage.jsx';
+import { EventDetailPage } from './components/EventDetailPage.jsx';
+import { BookingPage } from './components/BookingPage.jsx';
+import { BookingSuccessPage } from './components/BookingSuccessPage.jsx';
+import { MyBookingsPage } from './components/MyBookingsPage.jsx';
+import { TicketPassModal } from './components/TicketPassModal.jsx';
+import { INITIAL_EVENTS } from './data/eventsData.js';
+import { storageService } from './services/storage.js';
 
 export default function App() {
   // Current view: 'home' | 'events' | 'event-detail' | 'booking' | 'booking-success' | 'bookings'
-  const [currentView, setCurrentView] = useState<string>('home');
-  const [selectedEventId, setSelectedEventId] = useState<string>('12');
-  const [bookingQuantity, setBookingQuantity] = useState<number>(1);
+  const [currentView, setCurrentView] = useState('home');
+  const [selectedEventId, setSelectedEventId] = useState('12');
+  const [bookingQuantity, setBookingQuantity] = useState(1);
 
   // Data states from localStorage
-  const [events, setEvents] = useState<EventItem[]>(INITIAL_EVENTS);
-  const [inventory, setInventory] = useState<Record<string, number>>({});
-  const [bookings, setBookings] = useState<Booking[]>([]);
-  const [favorites, setFavorites] = useState<string[]>([]);
-  const [lastBooking, setLastBooking] = useState<Booking | null>(null);
-  const [passModalBooking, setPassModalBooking] = useState<Booking | null>(null);
+  const [events, setEvents] = useState(INITIAL_EVENTS);
+  const [inventory, setInventory] = useState({});
+  const [bookings, setBookings] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+  const [lastBooking, setLastBooking] = useState(null);
+  const [passModalBooking, setPassModalBooking] = useState(null);
 
   // Filter state for explore page
-  const [selectedCategory, setSelectedCategory] = useState<EventCategory>('All');
-  const [filters, setFilters] = useState<FilterState>({
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [filters, setFilters] = useState({
     searchQuery: '',
     category: 'All',
     city: 'All Locations',
@@ -73,7 +72,7 @@ export default function App() {
   }, []);
 
   // Update URL hash when view changes
-  const navigateTo = (view: string, eventId?: string, quantity: number = 1) => {
+  const navigateTo = (view, eventId, quantity = 1) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     if (eventId) {
       setSelectedEventId(eventId);
@@ -95,7 +94,7 @@ export default function App() {
   };
 
   // Inventory & booking actions
-  const handleBookingComplete = (newBooking: Booking) => {
+  const handleBookingComplete = (newBooking) => {
     setLastBooking(newBooking);
     const updatedBookings = storageService.getBookings();
     setBookings(updatedBookings);
@@ -105,7 +104,7 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleCancelBooking = (ticketNumber: string) => {
+  const handleCancelBooking = (ticketNumber) => {
     const success = storageService.cancelBooking(ticketNumber);
     if (success) {
       const updatedBookings = storageService.getBookings();
@@ -115,12 +114,12 @@ export default function App() {
     }
   };
 
-  const handleToggleFavorite = (id: string) => {
+  const handleToggleFavorite = (id) => {
     const updated = storageService.toggleFavorite(id);
     setFavorites(updated);
   };
 
-  const handleFilterChange = (partial: Partial<FilterState>) => {
+  const handleFilterChange = (partial) => {
     setFilters((prev) => ({ ...prev, ...partial }));
     if (partial.category) {
       setSelectedCategory(partial.category);
@@ -138,7 +137,7 @@ export default function App() {
     setSelectedCategory('All');
   };
 
-  const handleSearchHero = (query: string, city: string) => {
+  const handleSearchHero = (query, city) => {
     setFilters((prev) => ({
       ...prev,
       searchQuery: query,
@@ -147,7 +146,7 @@ export default function App() {
     navigateTo('events');
   };
 
-  const handleSelectCategory = (cat: EventCategory) => {
+  const handleSelectCategory = (cat) => {
     setSelectedCategory(cat);
     setFilters((prev) => ({ ...prev, category: cat }));
   };
@@ -200,7 +199,9 @@ export default function App() {
           <EventDetailPage
             event={currentEvent}
             availableTickets={
-              inventory[currentEvent.id] ?? currentEvent.initialAvailableTickets
+              inventory[currentEvent.id] !== undefined
+                ? inventory[currentEvent.id]
+                : currentEvent.initialAvailableTickets
             }
             isFavorite={favorites.includes(currentEvent.id)}
             onToggleFavorite={handleToggleFavorite}
@@ -216,7 +217,9 @@ export default function App() {
             event={currentEvent}
             initialQuantity={bookingQuantity}
             availableTickets={
-              inventory[currentEvent.id] ?? currentEvent.initialAvailableTickets
+              inventory[currentEvent.id] !== undefined
+                ? inventory[currentEvent.id]
+                : currentEvent.initialAvailableTickets
             }
             onBack={() => navigateTo('event-detail', currentEvent.id)}
             onBookingComplete={handleBookingComplete}

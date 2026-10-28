@@ -1,18 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Ticket, Search, Compass, Calendar, Menu, X } from 'lucide-react';
 
-interface NavbarProps {
-  currentView: string;
-  onNavigate: (view: string, eventId?: string) => void;
-  bookingCount: number;
-}
-
-export const Navbar: React.FC<NavbarProps> = ({
-  currentView,
-  onNavigate,
-  bookingCount,
-}) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+export const Navbar = ({ currentView, onNavigate, bookingCount }) => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md">
@@ -52,9 +42,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             Explore Events
           </button>
           <button
-            onClick={() => {
-              onNavigate('events');
-            }}
+            onClick={() => onNavigate('events')}
             className="transition-colors whitespace-nowrap cursor-pointer hover:text-white"
           >
             Categories

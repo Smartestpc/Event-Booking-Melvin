@@ -1,18 +1,8 @@
 import React, { useState } from 'react';
 import { Calendar, MapPin, Ticket, Heart, ArrowRight, User } from 'lucide-react';
-import { EventItem } from '../types';
-import { formatNaira } from '../utils/formatters';
+import { formatNaira } from '../utils/formatters.js';
 
-interface EventCardProps {
-  event: EventItem;
-  availableTickets: number;
-  isFavorite: boolean;
-  onToggleFavorite: (id: string) => void;
-  onViewDetails: (id: string) => void;
-  onBookNow: (id: string) => void;
-}
-
-export const EventCard: React.FC<EventCardProps> = ({
+export const EventCard = ({
   event,
   availableTickets,
   isFavorite,
