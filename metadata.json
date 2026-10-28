@@ -1,0 +1,8 @@
+{
+  "name": "AuraEvents - Event Discovery & Ticketing Platform",
+  "description": "Discover premier tech conferences, music concerts, and cultural experiences. Book tickets seamlessly with instant confirmation and pass management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
